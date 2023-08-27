@@ -1,0 +1,51 @@
+<div class="login d-flex flex-column">
+  <div *ngIf="loginError$ | async as loginError">
+    <div class="alert alert-danger" role="alert">
+      <ng-container *ngIf="loginError.status === 401; else systemError" [ngSwitch]="true">
+        <epl-template-renderer [htmlContent]="lockedOutMessage" *ngSwitchCase="loginError.userStatus==='Locked Out'">
+        </epl-template-renderer>
+        <epl-template-renderer [htmlContent]="duplicateInactiveMessage"
+          *ngSwitchCase="loginError.userStatus==='Inactive' || loginError.userStatus==='Duplicate'">
+        </epl-template-renderer>
+        <epl-template-renderer [htmlContent]="invalidStatusMessage"
+          *ngSwitchCase="loginError.userStatus==='Gatekeeper Rejected - Enrollment' || loginError.userStatus==='Rejected ID Check Failed'"></epl-template-renderer>
+        <epl-template-renderer [htmlContent]="pendingMessage" *ngSwitchCase="loginError.userStatus==='Pending'">
+        </epl-template-renderer>
+        <epl-template-renderer [htmlContent]="validationMessage" *ngSwitchDefault></epl-template-renderer>
+
+      </ng-container>
+      <ng-template #systemError>
+        The application has encountered an unknown error. Please try again later.
+      </ng-template>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center mb-4">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field class="w-100 mt-2">
+        <mat-label>{{labels['username'] ?? 'Username'}}</mat-label>
+        <input matInput autocomplete="off" formControlName="username" required>
+        <mat-error *ngIf="loginForm.controls['username'].hasError('required')">
+          Required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100 mt-2">
+        <mat-label>{{labels['password'] ?? 'Password'}}</mat-label>
+        <input matInput autocomplete="off" formControlName="password" type="password" required>
+        <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+          Required
+        </mat-error>
+      </mat-form-field>
+      <div class="buttons">
+        <a [routerLink]="['../reset-link']">Forgot password?</a>
+        <div class="spinner" *ngIf="logging$ | async; else notlogging">
+          <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+      </div>
+      <ng-template #notlogging>
+        <button mat-button color="login-button" type="submit">{{labels['submit'] ?? 'Log In'}}</button>
+      </ng-template>
+    </form>
+  </div>
+</div>
