@@ -1,0 +1,20 @@
+
+Template variables in angular
+A template variable is a variable that is created in, and identifies a component or element within, the template itself. In other words, a local reference to some element in your template that you wish to refer to, pass around, pass back to or reference from the TypeScript component or call things on.
+Using hash (#)
+ 
+
+Ng-template
+is a template element that Angular uses with structural. These template elements only work in the presence of structural directives, which help us to define a template that doesn’t render anything by itself, but conditionally renders them to the DOM.
+ 
+
+Ng-container
+ng-container is a simple directive that allows you to group elements in a template that doesn’t interfere with styles or layout because
+The ng-container does not render in the DOM, but content inside it is rendered
+This is helpful if you don’t want any extra div on DOM, you can simply use ng-container. Like use ng-if and ng-for at the same time.
+ 
+
+Ng-content
+Used to insert the content dynamically inside the component that helps to increase component reusability
+
+[innerHTML]
